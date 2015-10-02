@@ -16,6 +16,10 @@ enum Encoding {
     case URLFORM
 }
 
+enum RequestError: ErrorType {
+    case SyncRequest
+}
+
 class GoHTTP {
     
     let request: NSMutableURLRequest
@@ -53,9 +57,16 @@ class GoHTTP {
         return GoHTTP(httpMethod: Method.GET, url: path)
     }
     
-    func getSync() -> JSON? {
+    @available(iOS, deprecated =  9.0)
+    func getSync() throws -> JSON? {
         let response: AutoreleasingUnsafeMutablePointer<NSURLResponse?>=nil
-        let responseData = NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response) as NSData?
+        var responseData: NSData?
+        
+        do {
+            responseData = NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response) as NSData?
+        } catch {
+            throw RequestError.SyncRequest
+        }
         
         return JSON(data: responseData!)
     }
