@@ -16,6 +16,10 @@ enum Encoding {
     case URLFORM
 }
 
+enum RequestError: ErrorType {
+    case SyncRequest
+}
+
 class GoHTTP {
     
     let request: NSMutableURLRequest
@@ -30,8 +34,8 @@ class GoHTTP {
     
     init(httpMethod: Method=Method.GET, url: String, encoding:Encoding?=Encoding.JSON) {
         
-        self.request = NSMutableURLRequest(URL: NSURL(string: url))
-        self.request.HTTPMethod = httpMethod.toRaw()
+        self.request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        self.request.HTTPMethod = httpMethod.rawValue
         
         applyEncoding(encoding!)
     }
@@ -40,22 +44,30 @@ class GoHTTP {
         
         switch encoding {
             
-            case Encoding.JSON:
-                self.request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        case Encoding.JSON:
+            self.request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             
-            case Encoding.URLFORM:
-                self.request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        case Encoding.URLFORM:
+            self.request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         }
-       
+        
     }
     
     class func get(path:String) -> GoHTTP {
         return GoHTTP(httpMethod: Method.GET, url: path)
     }
     
-    func getSync() -> JSON? {
+    @available(iOS, deprecated =  9.0)
+    func getSync() throws -> JSON? {
         let response: AutoreleasingUnsafeMutablePointer<NSURLResponse?>=nil
-        var responseData = NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response, error: nil) as NSData?
+        var responseData: NSData?
+        
+        do {
+            responseData = NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response) as NSData?
+        } catch {
+            throw RequestError.SyncRequest
+        }
+        
         return JSON(data: responseData!)
     }
     
@@ -82,11 +94,11 @@ class GoHTTP {
     }
     
     func done(callback : (json: JSON, error:NSError?) -> ()) {
-        var session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil
             , delegateQueue: NSOperationQueue.mainQueue())
         
-        session.dataTaskWithRequest(self.request, completionHandler: { (dt:NSData!, urlResp: NSURLResponse!, err: NSError?) in
-            callback(json: JSON(data: dt), error: err)
+        session.dataTaskWithRequest(self.request, completionHandler: { (dt:NSData?, urlResp: NSURLResponse?, err: NSError?) in
+            callback(json: JSON(data: dt!), error: err)
         }).resume()
     }
     
