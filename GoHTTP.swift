@@ -34,10 +34,22 @@ class GoHTTP {
     
     init(httpMethod: Method=Method.GET, url: String, encoding:Encoding?=Encoding.JSON) {
         
-        self.request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        if let finalURL = NSURL(string: url) {
+            self.request = NSMutableURLRequest(URL: finalURL)
+        }
+        else {
+            print("GoHTTP warning: failed to create url")
+        }
+        
         self.request.HTTPMethod = httpMethod.rawValue
         
-        applyEncoding(encoding!)
+        if let encode = encoding {
+            applyEncoding(encode)
+        }
+        else {
+            print("GoHTTP warning: uncoded request")
+        }
+        
     }
     
     private func applyEncoding (encoding:Encoding) {
@@ -63,12 +75,16 @@ class GoHTTP {
         var responseData: NSData?
         
         do {
-            responseData = NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response) as NSData?
+            responseData = try NSURLConnection.sendSynchronousRequest(self.request, returningResponse: response) as NSData?
+            
+            guard let data = responseData else {return nil}
+            
+            return JSON(data: data)
+            
         } catch {
             throw RequestError.SyncRequest
         }
         
-        return JSON(data: responseData!)
     }
     
     class func post(path:String) -> GoHTTP {
@@ -93,13 +109,37 @@ class GoHTTP {
         return self
     }
     
-    func done(callback : (json: JSON, error:NSError?) -> ()) {
+    func done(callback : (json: JSON?, error:NSError?) -> ()) {
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil
             , delegateQueue: NSOperationQueue.mainQueue())
         
         session.dataTaskWithRequest(self.request, completionHandler: { (dt:NSData?, urlResp: NSURLResponse?, err: NSError?) in
-            callback(json: JSON(data: dt!), error: err)
+            
+            if let data = dt {
+                callback(json: JSON(data: data), error: err)
+            }
+            else {
+                callback(json: nil, error: err)
+            }
+            
         }).resume()
+    }
+    
+    func doneWithBlock(completion: (json: JSON?, error:NSError?) -> ()) -> () {
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: NSOperationQueue.mainQueue())
+        
+        session.dataTaskWithRequest(self.request, completionHandler: { (dt:NSData?, urlResp: NSURLResponse?, err: NSError?) in
+            
+            if let data = dt {
+                completion(json: JSON(data: data), error: err)
+            }
+            else {
+                completion(json: nil, error: err)
+            }
+            
+        }).resume()
+        
     }
     
 }
