@@ -20,10 +20,14 @@ it, simply add the following line to your Podfile:
 pod "GoHTTP"
 ```
 
-## Author
-
-GuilhermeMachado, guilherme.menon.machado@gmail.com
-
 ## License
 
 GoHTTP is available under the MIT license. See the LICENSE file for more info.
+=======
+GoHTTP
+======
+
+Simple HTTP lib to Swift integrated with [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
+
+####To use:
+Just copy the files: GoHTTP.swift and SwiftyJSON.swift to your project. 
