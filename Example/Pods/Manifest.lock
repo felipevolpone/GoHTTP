@@ -1,0 +1,19 @@
+PODS:
+  - GoHTTP (0.1.0):
+    - SwiftyJSON
+  - SwiftyJSON (2.3.2)
+
+DEPENDENCIES:
+  - GoHTTP (from `../`)
+
+EXTERNAL SOURCES:
+  GoHTTP:
+    :path: ../
+
+SPEC CHECKSUMS:
+  GoHTTP: bc662bdd7b6b01ba4dbf42492e1a267b306dbf74
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+
+PODFILE CHECKSUM: f7c12d1ed9956f8ee3b1ac1709d324ce590d192d
+
+COCOAPODS: 1.0.1

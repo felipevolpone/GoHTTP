@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'GoHTTP'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of GoHTTP.'
+  s.summary          = 'HTTP lib to Swift'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,25 +18,26 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Simple HTTP lib to Swift integrated with SwiftyJSON.
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/GoHTTP'
+  s.homepage         = 'https://github.com/felipevolpone/GoHTTP.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'GuilhermeMachado' => 'guilherme.menon.machado@gmail.com' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/GoHTTP.git', :tag => s.version.to_s }
+  s.author           = { 'felipevolpone' => 'felipevolpone@gmail.com' }
+  s.source           = { :git => 'https://github.com/felipevolpone/GoHTTP.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'GoHTTP/Classes/**/*'
-  
+
   # s.resource_bundles = {
   #   'GoHTTP' => ['GoHTTP/Assets/*.png']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'SwiftyJSON'
+
 end

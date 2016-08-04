@@ -1,0 +1,6 @@
+framework module GoHTTP {
+  umbrella header "GoHTTP-umbrella.h"
+
+  export *
+  module * { export * }
+}
