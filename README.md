@@ -5,11 +5,20 @@
 [![License](https://img.shields.io/cocoapods/l/GoHTTP.svg?style=flat)](http://cocoapods.org/pods/GoHTTP)
 [![Platform](https://img.shields.io/cocoapods/p/GoHTTP.svg?style=flat)](http://cocoapods.org/pods/GoHTTP)
 
+GoHTTP
+======
+
+Simple HTTP lib to Swift integrated with [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
+
+======
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+iOS 8+
 
 ## Installation
 
@@ -19,15 +28,9 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "GoHTTP"
 ```
-
-## License
-
-GoHTTP is available under the MIT license. See the LICENSE file for more info.
-=======
-GoHTTP
-======
-
-Simple HTTP lib to Swift integrated with [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
-
-####To use:
+####Manually:
 Just copy the files: GoHTTP.swift and SwiftyJSON.swift to your project. 
+
+### TODO
+[ ] Demo project <br>
+[ ] Docs
